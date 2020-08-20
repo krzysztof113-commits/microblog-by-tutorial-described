@@ -8,4 +8,4 @@ from app import app
 
 # environment variables are not remembered across terminal sessions
 # to make it easier flask has python support of environment variables that automatically import on 'flask run'
-# you just need to 'pip install python-dotenv', before we just installed our 'flask'
+# you just need to 'pip install python-dotenv', before we just installed our 'flask' (you can see requirements.txt now)
