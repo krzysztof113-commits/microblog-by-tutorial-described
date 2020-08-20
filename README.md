@@ -1,4 +1,4 @@
-# microblog-by-tutorial-descripted
+# microblog-by-tutorial-described
 Based on @miguelgrinberg flask tutorial.
 
 I put many comments about how the application works, different versions, steps I made following the tutorial and understanding.
