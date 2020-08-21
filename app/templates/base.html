@@ -8,8 +8,9 @@
     </head>
     <body>
         <div>Microblog:
-            <a href="/index">Home</a>
-            <a href="/login">Login</a>
+            {# url_for() directs to view functions so it is easier to manage links later #}
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('login') }}">Login</a>
         </div>
         <hr>
         {# get_flashed_messages comes from Flask, stores flash() massages #}
