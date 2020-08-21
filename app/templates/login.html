@@ -11,10 +11,16 @@
             {{ form.username.label }}<br>
             {# you can set html arguments (e.g. size of field or even styles, IDs) by putting it into form function #}
             {{ form.username(size=32) }}
+            {% for error in form.username.errors %}
+            <br><span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.password.label }}<br>
             {{ form.password(size=32) }}
+            {% for error in form.password.errors %}
+            <br><span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p>{{ form.submit() }}</p>

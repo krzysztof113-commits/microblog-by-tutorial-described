@@ -12,6 +12,18 @@
             <a href="/login">Login</a>
         </div>
         <hr>
+        {# get_flashed_messages comes from Flask, stores flash() massages #}
+        {# get_flashed_messages view unseen messages, they are being shown only once #}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
         {# block statement is a viewer for content variable #}
         {% block content %}{% endblock %}
     </body>
