@@ -14,6 +14,8 @@ class Config(object):
 	# WTForms uses it to encrypt against Cross-Site Request Forgery (CSRF) attacks. Only admins know the key.
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
 	# configs for databases - SQLAlchemy
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+	# I added (...) + '?check_same_thread=False' so I don't have session multithread security errors
+	SQLALCHEMY_DATABASE_URI = (os.environ.get('DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'app.db')) \
+							  + '?check_same_thread=False'
 	# this one makes some flask errors or maybe additional steps, warnings if changing databases so we turn it off
 	SQLALCHEMY_TRACK_MODIFICATIONS = False

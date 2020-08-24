@@ -8,7 +8,7 @@ class User(db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	# posts is what is necessary to display user of post which has some relationship with it, it's gonna be post.author
-	# (for post in posts: print(post.author)), backref is a name of object that's gonna be created, not a Column
+	# (for post in posts: print(post.author)), backref is a name of object, the alias for user, not a Column
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 
 	# the way how the record of the table (object) is printed
