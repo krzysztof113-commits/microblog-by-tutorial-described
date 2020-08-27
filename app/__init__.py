@@ -18,6 +18,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 # flask-login needs to have an instance like some others flask extensions
 login = LoginManager(app)
+# this flask_login feature sets the name of which view function redirect to if the page is restricted by @login_required
+login.login_view = 'login'
 
 # routes will need the app variable, to prevent looping (circular imports) we put it after the app variable (object)
 # models will be used to define the structure of the database
