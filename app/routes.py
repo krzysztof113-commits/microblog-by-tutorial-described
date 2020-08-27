@@ -5,6 +5,8 @@ from flask_login import current_user, login_user
 from flask_login import logout_user
 from app.models import User
 from flask_login import login_required
+from flask import request
+from werkzeug.urls import url_parse
 
 
 # @app refers to imported above app module, .route is a method that can be used as decorator to connect URLs
@@ -45,7 +47,12 @@ def login():
 			flash('Incorrect username or password')
 			return redirect(url_for('login'))
 		login_user(user, remember=form.remember_me.data)
-		return redirect(url_for('index'))
+		# Flask provides a request variable that contains all the information that the client sent with the request
+		# The request.args attribute exposes the contents of the query string in a friendly dictionary format
+		next_page = request.args.get('next')
+		if not next_page or url_parse(next_page).netloc != '':
+			next_page = url_for('index')
+		return redirect(next_page)
 	return render_template('login.html', title='Sign In', form=form)
 
 
