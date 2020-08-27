@@ -31,7 +31,7 @@ def index():
 			'body': 'What a good day.'
 		}
 	]
-	return render_template('index.html', title='Home', user=user, posts=posts)
+	return render_template('index.html', title='Home', posts=posts)
 
 
 # default is GET method but we want more of it because GET is mainly used for getting things from server
