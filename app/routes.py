@@ -9,6 +9,7 @@ from flask import request
 from werkzeug.urls import url_parse
 from app import db
 from app.forms import RegistrationForm
+from datetime import datetime
 
 
 # @app refers to imported above app module, .route is a method that can be used as decorator to connect URLs
@@ -87,3 +88,14 @@ def user(username):
 		{'author': user, 'body': 'Test post #2'}
 	]
 	return render_template('user.html', user=user, posts=posts)
+
+
+@app.before_request
+def before_request():
+	if current_user.is_authenticated:
+		current_user.last_seen = datetime.utcnow()
+		#  there is no db.session.add() before the commit, consider that when you reference current_user,
+		#  Flask-Login will invoke the user loader callback function, which will run a database query
+		#  that will put the target user in the database session. So you can add the user again in this function,
+		#  but it is not necessary because it is already there.
+		db.session.commit()

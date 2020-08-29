@@ -5,6 +5,7 @@ from flask_login import UserMixin
 # we need to add special decorator so the flask_login extension can read database values
 # it is good since flask_login can work for every database then, does not need to know how to read it
 from app import login
+from hashlib import md5
 
 
 # UserMixin is a class 'template' that allows us to fulfill the (only) requirement of flask_login extension
@@ -17,6 +18,8 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
+	about_me = db.Column(db.String(140))
+	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 	# posts is what is necessary to display user of post which has some relationship with it, it's gonna be post.author
 	# (for post in posts: print(post.author)), backref is a name of object, the alias for user, not a Column
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
@@ -32,6 +35,10 @@ class User(UserMixin, db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+
+	def avatar(self, size):
+		digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+		return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
 
 class Post(db.Model):
