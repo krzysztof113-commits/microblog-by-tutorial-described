@@ -55,6 +55,9 @@ if not app.debug:
 	file_handler.setLevel(logging.INFO)
 	app.logger.addHandler(file_handler)
 
-	# there is general setting for app.logger to which errors to capture
+	# there is general setting for app.logger to which errors to capture (we are lowering the level, also in above)
+	# they are DEBUG, INFO, WARNING, ERROR and CRITICAL in increasing order of severity
 	app.logger.setLevel(logging.INFO)
+	# As a first interesting use of the log file, the server writes a line to the logs each time it starts.
+	# When this application runs on a production server, these log entries will tell you when the server was restarted.
 	app.logger.info('Microblog startup')
