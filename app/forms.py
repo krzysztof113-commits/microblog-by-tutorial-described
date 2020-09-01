@@ -43,6 +43,10 @@ class EditProfileForm(FlaskForm):
 	submit = SubmitField('Submit')
 
 	def __init__(self, original_username, *args, **kwargs):
+		# thanks to super() built-in method our __init__ can use username, about_me... arguments as *args, **kwargs
+		# along of newly created original_username that can be defined as EditProfileForm(current_user.username)
+		# this is an overloaded constructor
+		# this username is saved as an instance variable, and checked in the validate_username()
 		super(EditProfileForm, self).__init__(*args, **kwargs)
 		self.original_username = original_username
 
