@@ -105,7 +105,8 @@ def before_request():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-	form = EditProfileForm()
+	# defining what is the original_username (check __init__ of EditProfileForm in forms.py)
+	form = EditProfileForm(current_user.username)
 	# validation works on 'POST' level, if something is incorrect
 	# if it is valid then pressing the button does:
 	if form.validate_on_submit():
