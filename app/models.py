@@ -7,6 +7,12 @@ from flask_login import UserMixin
 from app import login
 from hashlib import md5
 
+# Since this is an auxiliary table has only foreign keys, I created it without an associated model class.
+followers = db.Table('followers',
+					db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+					db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 
 # UserMixin is a class 'template' that allows us to fulfill the (only) requirement of flask_login extension
 # in order to make it works, User record needs to have is_authenticated, is_active (verified), is_anonymous and
@@ -23,6 +29,20 @@ class User(UserMixin, db.Model):
 	# posts is what is necessary to display user of post which has some relationship with it, it's gonna be post.author
 	# (for post in posts: print(post.author)), backref is a name of object, the alias for user, not a Column
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+	followed = db.relationship(
+		# 'User' is the right side entity of the relationship
+		# secondary configures the association table used for this relationship, which I defined right above this class
+		'User', secondary=followers,
+		# primaryjoin indicates the condition that links the left side entity
+		# the followers.c.follower_id expression references the follower_id column of the association table
+		primaryjoin=(followers.c.follower_id == id),
+		# secondaryjoin indicates the condition that links the right (the followed user) with the association table
+		secondaryjoin=(followers.c.followed_id == id),
+		# backref defines how this relationship will be accessed from the right side entity.
+		# From the left side, the relationship is named followed,
+		# so from the right side I am going to use the name followers
+		# first lazy is for the backref (right side), other is for followed (left side)
+		backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
 	# the way how the record of the table (object) is printed
 	def __repr__(self):
