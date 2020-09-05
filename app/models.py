@@ -73,6 +73,13 @@ class User(UserMixin, db.Model):
 		return self.followed.filter(
 			followers.c.followed_id == user.id).count() > 0
 
+	def followed_posts(self):
+		return Post.query.join(
+			# query.join joins two tables, the first is Post and the other is followers
+			followers, (followers.c.followed_id == Post.user_id)).filter(
+				followers.c.follower_id == self.id).order_by(
+					Post.timestamp.desc())
+
 
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
