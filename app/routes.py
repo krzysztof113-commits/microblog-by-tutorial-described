@@ -84,12 +84,12 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-	form = EmptyForm()
 	user = User.query.filter_by(username=username).first_or_404()
 	posts = [
 		{'author': user, 'body': 'Test post #1'},
 		{'author': user, 'body': 'Test post #2'}
 	]
+	form = EmptyForm()
 	return render_template('user.html', user=user, posts=posts, form=form)
 
 
@@ -133,10 +133,10 @@ def follow(username):
 		if user is None:
 			flash('User {} not found.'.format(username))
 			return redirect(url_for('index'))
-		if user == current_user.username:
+		if user == current_user:
 			flash('You cannot follow yourself!')
 			return redirect(url_for('user', username=username))
-		current_user.follow(username)
+		current_user.follow(user)
 		db.session.commit()
 		flash('You are following {}!'.format(username))
 		return redirect(url_for('user', username=username))
@@ -153,10 +153,10 @@ def unfollow(username):
 		if user is None:
 			flash('User {} not found.'.format(username))
 			return redirect(url_for('index'))
-		if user == current_user.username:
+		if user == current_user:
 			flash('You cannot unfollow yourself!')
 			return redirect(url_for('user', username=username))
-		current_user.unfollow(username)
+		current_user.unfollow(user)
 		db.session.commit()
 		flash('You are not following {}!'.format(username))
 		return redirect(url_for('user', username=username))
