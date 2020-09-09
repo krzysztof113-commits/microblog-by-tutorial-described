@@ -12,15 +12,28 @@ from app.forms import RegistrationForm
 from datetime import datetime
 from app.forms import EditProfileForm
 from app.forms import EmptyForm
+from app.forms import PostForm
+from app.models import Post
 
 
 # @app refers to imported above app module, .route is a method that can be used as decorator to connect URLs
 # @ are decorators; def under them, is created by them, a view function
 # def index(), here is the name you would use in a url_for() call to get the URL
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+	form = PostForm()
+	if form.validate_on_submit():
+		post = Post(body=form.post.data, author=current_user)
+		db.session.add(post)
+		db.session.commit()
+		flash('Your post is now live!')
+		# when you hit browser's refresh button it basically re-issue the last request
+		# if we don't use redirect for index, then the last request will be adding the post
+		# to avoid this we use redirect after making changes to database so user don't have option to re-issue wrongly
+		# this is the popular Post/Redirect/Get pattern, it avoids making duplicates
+		return redirect(url_for('index'))
 	posts = [
 		{
 			'author': {'username': 'John'},
@@ -29,13 +42,9 @@ def index():
 		{
 			'author': {'username': 'Susan'},
 			'body': 'I found Garfield!'
-		},
-		{
-			'author': {'username': 'Carol'},
-			'body': 'What a good day.'
 		}
 	]
-	return render_template('index.html', title='Home', posts=posts)
+	return render_template('index.html', title='Home', form=form, posts=posts)
 
 
 # default is GET method but we want more of it because GET is mainly used for getting things from server
