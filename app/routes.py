@@ -34,8 +34,20 @@ def index():
 		# to avoid this we use redirect after making changes to database so user don't have option to re-issue wrongly
 		# this is the popular Post/Redirect/Get pattern, it avoids making duplicates
 		return redirect(url_for('index'))
-	posts = current_user.followed_posts().all()
-	return render_template('index.html', title='Home Page', form=form, posts=posts)
+	page = request.args.get('page', 1, type=int)
+	posts = current_user.followed_posts().paginate(
+		# False here is to not display errors if there are not enought posts to show but empty lists
+		page, app.config['POSTS_PER_PAGE'], False)
+	return render_template('index.html', title='Home Page', form=form, posts=posts.items)
+
+
+@app.route('/explore')
+@login_required
+def explore():
+	page = request.args.get('page', 1, type=int)
+	posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+		page, app.config['POSTS_PER_PAGE'], False)
+	return render_template('index.html', title='Explore', posts=posts.items)
 
 
 # default is GET method but we want more of it because GET is mainly used for getting things from server
@@ -162,10 +174,3 @@ def unfollow(username):
 		return redirect(url_for('user', username=username))
 	else:
 		return redirect(url_for('index'))
-
-
-@app.route('/explore')
-@login_required
-def explore():
-	posts = Post.query.order_by(Post.timestamp.desc()).all()
-	return render_template('index.html', title='Explore', posts=posts)
