@@ -34,17 +34,8 @@ def index():
 		# to avoid this we use redirect after making changes to database so user don't have option to re-issue wrongly
 		# this is the popular Post/Redirect/Get pattern, it avoids making duplicates
 		return redirect(url_for('index'))
-	posts = [
-		{
-			'author': {'username': 'John'},
-			'body': 'Where is Garfield?'
-		},
-		{
-			'author': {'username': 'Susan'},
-			'body': 'I found Garfield!'
-		}
-	]
-	return render_template('index.html', title='Home', form=form, posts=posts)
+	posts = current_user.followed_posts().all()
+	return render_template('index.html', title='Home Page', form=form, posts=posts)
 
 
 # default is GET method but we want more of it because GET is mainly used for getting things from server
