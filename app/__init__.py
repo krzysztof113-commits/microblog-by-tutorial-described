@@ -13,6 +13,7 @@ from logging.handlers import RotatingFileHandler
 import os
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
 
 # __name__ is something like a mode of flask application that is default and works good on basic projects
 app = Flask(__name__)
@@ -28,6 +29,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 mail = Mail(app)
 bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 # routes will need the app variable, to prevent looping (circular imports) we put it after the app variable (object)
 # models will be used to define the structure of the database
