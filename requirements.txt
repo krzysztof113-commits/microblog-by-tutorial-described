@@ -8,3 +8,4 @@ flask-login
 email-validator
 flask-mail
 pyjwt
+flask-bootstrap

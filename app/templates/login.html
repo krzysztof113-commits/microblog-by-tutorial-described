@@ -1,30 +1,17 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{# When the action is set to an empty string the form is submitted to the URL that is currently in the address bar #}
-{% block content %}
+{% block app_content %}
     <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {# Hidden tag gives your application superpowers of using token to prevent CSRF attacks (see config.py) #}
-        {{ form.hidden_tag() }}
-        <p>
-            {# taking first argument from form username which is label #}
-            {{ form.username.label }}<br>
-            {# you can set html arguments (e.g. size of field or even styles, IDs) by putting it into form function #}
-            {{ form.username(size=32) }}
-            {% for error in form.username.errors %}
-            <br><span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
-            {% for error in form.password.errors %}
-            <br><span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    <p> Forgot Your Password? <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a></p>
-    <p>New user? <a href="{{ url_for('register') }}">Click to register!</a></p>
+    <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    <br>
+    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+    <p>
+        Forgot Your Password?
+        <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
+    </p>
 {% endblock %}
