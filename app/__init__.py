@@ -83,6 +83,6 @@ def get_locale():
 	# Accept-Language: da, en-gb;q=0.8, en;q=0.7; where float numbers are weight of importance, preference
 	# best_match(app.config['LANGUAGES']) is just limiting the choice to ones we have set in our server
 
-	# return request.accept_languages.best_match(app.config['LANGUAGES'])
+	return request.accept_languages.best_match(app.config['LANGUAGES'])
 	# or force it by:
-	return 'pl'
+	# return 'pl'

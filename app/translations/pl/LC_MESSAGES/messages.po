@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-16 20:46+0200\n"
+"POT-Creation-Date: 2020-09-16 22:10+0200\n"
 "PO-Revision-Date: 2020-09-16 20:54+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl\n"
@@ -161,7 +161,7 @@ msgstr "Przepraszamy za utrudnienia. Powiadomiliśmy administratora o problemach
 #: app/templates/_post.html:15
 #, python-format
 msgid "%(username)s said %(when)s:"
-msgstr "%(username)s napisał %(when)s:"
+msgstr "%(username)s napisał(a) %(when)s:"
 
 #: app/templates/base.html:4
 msgid "Welcome to Microblog"
