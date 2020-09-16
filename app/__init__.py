@@ -17,6 +17,7 @@ from flask_moment import Moment
 from flask_babel import Babel
 # request thing can load custom things on each request
 from flask import request
+from flask_babel import lazy_gettext as _l
 
 # __name__ is something like a mode of flask application that is default and works good on basic projects
 app = Flask(__name__)
@@ -30,6 +31,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 # this flask_login feature sets the name of which view function redirect to if the page is restricted by @login_required
 login.login_view = 'login'
+login.login_message = _l('Please log in to access this page.')
 mail = Mail(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
@@ -80,4 +82,7 @@ def get_locale():
 	# Accept-Language header is set by browser, the browser has setting to choice which language to get, for exa.:
 	# Accept-Language: da, en-gb;q=0.8, en;q=0.7; where float numbers are weight of importance, preference
 	# best_match(app.config['LANGUAGES']) is just limiting the choice to ones we have set in our server
-	return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+	# return request.accept_languages.best_match(app.config['LANGUAGES'])
+	# or force it by:
+	return 'pl'

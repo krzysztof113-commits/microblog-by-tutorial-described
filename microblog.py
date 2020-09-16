@@ -2,6 +2,7 @@
 # the statement imports the app variable that is a member of the app package
 from app import app, db
 from app.models import User, Post
+from app import cli
 
 # to actually start the server we need to tell flask where is this python script
 # by using 'set FLASK_APP=microblog.py' in a terminal (set = export for linux)
