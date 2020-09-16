@@ -14,6 +14,9 @@ import os
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
+from flask_babel import Babel
+# request thing can load custom things on each request
+from flask import request
 
 # __name__ is something like a mode of flask application that is default and works good on basic projects
 app = Flask(__name__)
@@ -30,6 +33,7 @@ login.login_view = 'login'
 mail = Mail(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+babel = Babel(app)
 
 # routes will need the app variable, to prevent looping (circular imports) we put it after the app variable (object)
 # models will be used to define the structure of the database
@@ -67,3 +71,13 @@ if not app.debug:
 	# As a first interesting use of the log file, the server writes a line to the logs each time it starts.
 	# When this application runs on a production server, these log entries will tell you when the server was restarted.
 	app.logger.info('Microblog startup')
+
+# babel addon has special decorator, it can be invoked on a request
+@babel.localeselector
+def get_locale():
+	# accept_languages is an attribute of Flask's request object
+	# it provides a high-level interface to work with the Accept-Language header that clients send with a request
+	# Accept-Language header is set by browser, the browser has setting to choice which language to get, for exa.:
+	# Accept-Language: da, en-gb;q=0.8, en;q=0.7; where float numbers are weight of importance, preference
+	# best_match(app.config['LANGUAGES']) is just limiting the choice to ones we have set in our server
+	return request.accept_languages.best_match(app.config['LANGUAGES'])
