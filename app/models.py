@@ -1,6 +1,7 @@
 from datetime import datetime
 from app import db
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask import current_app
 from flask_login import UserMixin
 # We need to add special decorator so the flask_login
 # extension can read database values. It is good since flask_login
@@ -9,7 +10,6 @@ from app import login
 from hashlib import md5
 from time import time
 import jwt
-from app import app
 
 # Since this is an auxiliary table has only foreign keys,
 # I created it without an associated model class.
@@ -101,7 +101,8 @@ class User(UserMixin, db.Model):
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            current_app.config['SECRET_KEY'],
+            algorithm='HS256').decode('utf-8')
 
     # Here is a static method, it can be invoked directly from the class.
     # A static method is similar to a class method, with the only difference
@@ -109,7 +110,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except Exception:
             return

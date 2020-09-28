@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 # abspath is a function that gives like that in default be e.g. /templates or /
 # We need a full path so as an argument needs to be name of our
@@ -7,6 +8,7 @@ import os
 # or most important joining things because there can be
 # different paths for windows, linux, macos etc.
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config(object):

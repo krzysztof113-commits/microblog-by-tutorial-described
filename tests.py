@@ -1,21 +1,39 @@
 from datetime import datetime, timedelta
 import unittest
-from app import app, db
+from app import create_app, db
 from app.models import User, Post
+from config import Config
+
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
 class UserModelCase(unittest.TestCase):
-    # setUp and tearDown methods are running on the start and the end of each function test
-    # those are special methods for the unit testing framework
+    # setUp and tearDown methods are running on the start
+    # and the end of each function test.
+    # Those are special methods for the unit testing framework.
     def setUp(self):
-        # the location is set to in-memory SQLite database, so our created before database is untouched
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
-        # quick way to create a tables in the database
+        self.app = create_app(TestConfig)
+        # app_context is the another type of contexts
+        # (along of request context that loads e.g. current_user)
+        # It works from the terminal view. It is like we are working
+        # from the brain of application and seeing all threads,
+        # so we need to create and push app context, then it can be
+        # accessed for the unit testing purposes.
+        # This needs to be a console started by running python,
+        # because the flask shell command automatically
+        # activates an application context for convenience.
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        # Quick way to create a tables in the database.
         db.create_all()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        self.app_context.pop()
 
     def test_password_hashing(self):
         u = User(username='susan')
